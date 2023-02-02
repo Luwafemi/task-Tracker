@@ -26,18 +26,18 @@ function App() {
           flexDirection: "row-reverse",
         }}
       >
-        <button className="btn btn-primary mt-2"> Add Task </button>
+        <button className="btn btn-primary mt-3"> Add Task </button>
       </div>
-      <h1 style={{ marginBottom: 50, marginTop: 30, fontWeight: 800 }}>
+      {/* <h4 style={{ marginBottom: 50, marginTop:30 ,fontWeight:900, paddingLeft:118}}>
         {" "}
         TASKS{" "}
-      </h1>
-      <ul style={{ listStyle: "none" }}>
+      </h4> */}
+      <ul style={{ listStyle: "none", marginTop:75,marginBottom:30 }}>
         {tasks.map((task) => (
           <div key={task.id} style={{ display: "flex", marginBottom: 20 }}>
             <FaRegCircle />
             <span
-              style={{ display: "flex", marginRight: "20vw", marginLeft: 10 }}
+              style={{ display: "flex", marginRight: 150, marginLeft: 10 }}
             >
               <li style={{ marginTop: -4 }}>
                 {task.taskName}

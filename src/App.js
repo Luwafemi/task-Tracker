@@ -1,22 +1,30 @@
-import React, { useEffect } from "react";
-import {
-  FaRegTrashAlt,
-  FaRegBell,
-  FaRegCircle,
-  FaRegCheckCircle,
-} from "react-icons/fa";
+import React from "react";
+import { FaRegTrashAlt, FaRegBell, FaRegCircle } from "react-icons/fa";
+// import { IconContext } from "react-icons";
 
 function App() {
   const [tasks, setTasks] = React.useState([]);
+
+  // fetch tasks from server
   React.useEffect(() => {
     async function getTasksFromServer() {
-      var response = await fetch("http://localhost:5000/tasks");
-      response = await response.json();
-      setTasks(response);
+      var tasks = await fetch("http://localhost:5000/tasks");
+      tasks = await tasks.json();
+      setTasks(tasks);
     }
     getTasksFromServer();
   }, []);
-  // console.log("ok");
+
+  //delete task, on clicking the delete button
+  let deleteTask = async (task) => {
+    await fetch(`http://localhost:5000/tasks/${task}`, {
+      method: "DELETE",
+    });
+
+    var tasks = await fetch("http://localhost:5000/tasks");
+    tasks = await tasks.json();
+    setTasks(tasks);
+  };
 
   return (
     <div className="container">
@@ -28,24 +36,20 @@ function App() {
       >
         <button className="btn btn-primary mt-3"> Add Task </button>
       </div>
-      {/* <h4 style={{ marginBottom: 50, marginTop:30 ,fontWeight:900, paddingLeft:118}}>
-        {" "}
-        TASKS{" "}
-      </h4> */}
-      <ul style={{ listStyle: "none", marginTop:75,marginBottom:30 }}>
+
+      <ul style={{ listStyle: "none", marginTop: 75, marginBottom: 30 }}>
         {tasks.map((task) => (
           <div key={task.id} style={{ display: "flex", marginBottom: 20 }}>
             <FaRegCircle />
-            <span
-              style={{ display: "flex", marginRight: 150, marginLeft: 10 }}
-            >
-              <li style={{ marginTop: -4 }}>
-                {task.taskName}
-              </li>
+            <span style={{ display: "flex", marginRight: 150, marginLeft: 10 }}>
+              <li style={{ marginTop: -4 }}>{task.taskName}</li>
             </span>
-            <FaRegBell />
-            <span style={{ width: 20 }}></span>
-            <FaRegTrashAlt />
+            <FaRegBell style={{ marginRight: 20 }} />
+            <FaRegTrashAlt
+              onClick={() => {
+                deleteTask(task.id);
+              }}
+            />
             {/* <FaRegCheckCircle /> */}
           </div>
         ))}
@@ -55,8 +59,6 @@ function App() {
       </footer>
     </div>
   );
-  
-  }
-
+}
 
 export default App;

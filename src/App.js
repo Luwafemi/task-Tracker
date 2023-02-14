@@ -1,23 +1,24 @@
 import React from "react";
 import { FaRegTrashAlt, FaRegBell, FaRegCircle } from "react-icons/fa";
-// import { IconContext } from "react-icons";
+import Form from "./components/Form";
 
 function App() {
   const [tasks, setTasks] = React.useState([]);
+  const formElement = React.useRef(null);
 
   // fetch tasks from server
   React.useEffect(() => {
-    async function getTasksFromServer() {
+    let getTasksFromServer = async () => {
       var tasks = await fetch("http://localhost:5000/tasks");
       tasks = await tasks.json();
       setTasks(tasks);
-    }
+    };
     getTasksFromServer();
   }, []);
 
-  //delete task, on clicking the delete button
-  let deleteTask = async (task) => {
-    await fetch(`http://localhost:5000/tasks/${task}`, {
+  //delete task, on clicking the delete icon
+  let deleteTask = async (taskId) => {
+    fetch(`http://localhost:5000/tasks/${taskId}`, {
       method: "DELETE",
     });
 
@@ -28,13 +29,23 @@ function App() {
 
   return (
     <div className="container">
+      <Form formElement={formElement} setTasks={setTasks} />
       <div
         style={{
           display: "flex",
           flexDirection: "row-reverse",
         }}
       >
-        <button className="btn btn-primary mt-3"> Add Task </button>
+        <button
+          className="btn btn-primary mt-3"
+          // on clicking button,toggle form visibility, using .showform CSS-class
+          onClick={(e) => {
+            formElement.current.classList.toggle("showForm");
+          }}
+        >
+          {" "}
+          Add Task{" "}
+        </button>
       </div>
 
       <ul style={{ listStyle: "none", marginTop: 75, marginBottom: 30 }}>
